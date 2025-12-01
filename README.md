@@ -1,4 +1,4 @@
-# 📊 Sales Dashboard – Junior Frontend Engineer Assessment
+# 📊 Sales Dashboard – Frontend Engineer Assessment
 
 A responsive **Sales Analytics Dashboard** built with **React.js**.  
 The dashboard fetches sales data from a backend API and includes filtering, sorting, charting, and pagination features.
