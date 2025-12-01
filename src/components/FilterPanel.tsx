@@ -21,7 +21,7 @@ interface FilterPanelProps {
   isLoading: boolean;
 }
 
-// Custom header component with month/year dropdowns
+// CUSTOM DATE PICKER HEADER COMPONENT
 const CustomHeader = ({
   date,
   changeYear,
@@ -147,12 +147,14 @@ const CustomHeader = ({
   );
 };
 
+// MAIN FILTER PANEL COMPONENT
 const FilterPanel: React.FC<FilterPanelProps> = ({
   filters,
   onFiltersChange,
   onSearch,
   isLoading,
 }) => {
+  // LOCAL STATE MANAGEMENT
   const [localFilters, setLocalFilters] = useState<FilterParams>(filters);
 
   // Update local filters when props change
@@ -170,7 +172,8 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
     borderColor: "rgba(0, 178, 174, 0.3)",
   };
 
-  // Handle local filter changes
+  // HELPER FUNCTIONS
+  // Handle individual filter changes without committing to parent
   const handleLocalFilterChange = (newFilters: Partial<FilterParams>) => {
     setLocalFilters(prev => ({
       ...prev,
@@ -178,7 +181,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
     }));
   };
 
-  // Handle search button click
+  // Apply all local filters and trigger search
   const handleSearchClick = () => {
     // Apply all local filters at once
     onFiltersChange(localFilters);
@@ -186,7 +189,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
     onSearch();
   };
 
-  // Check if any filter is active (using local filters for UI display)
+  // Check if any filters are currently set (for UI display)
   const hasActiveFilters = () => {
     return (
       localFilters.startDate ||
@@ -197,7 +200,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
     );
   };
 
-  // Format date for display
+  // Format dates for user-friendly display in active filters section
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -207,7 +210,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
     });
   };
 
-  // Clear all filters
+  // Clear all filters and reset state
   const handleClearFilters = () => {
     const clearedFilters = {
       startDate: "",
@@ -220,7 +223,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
     onFiltersChange(clearedFilters);
   };
 
-  // Remove individual filter
+  // Remove individual filter while keeping others
   const handleRemoveFilter = (filterKey: keyof FilterParams) => {
     const updatedFilters = { ...localFilters, [filterKey]: "" };
     setLocalFilters(updatedFilters);
@@ -229,13 +232,15 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mb-8 border border-gray-100">
+      {/* FILTER PANEL HEADER */}
       <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
         <Search className="w-5 h-5" style={gradientStyle} />
         <span style={gradientStyle}>Filters</span>
       </h2>
 
+      {/* FILTER INPUTS GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        {/* Date Range - Start Date */}
+        {/* DATE RANGE - START DATE */}
         <div className="space-y-1 relative">
           <label className="filter-label">
             <CalendarIcon
@@ -262,7 +267,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           </div>
         </div>
 
-        {/* Date Range - End Date */}
+        {/* DATE RANGE - END DATE */}
         <div className="space-y-1 relative">
           <label className="filter-label">
             <CalendarIcon
@@ -296,7 +301,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           </div>
         </div>
 
-        {/* Additional Filters */}
+        {/* MIN PRICE FILTER */}
         <div className="space-y-1 relative">
           <label className="filter-label">
             <DollarSign
@@ -315,6 +320,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           />
         </div>
 
+        {/* EMAIL FILTER */}
         <div className="space-y-1 relative">
           <label className="filter-label">
             <Mail
@@ -333,6 +339,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           />
         </div>
 
+        {/* PHONE FILTER */}
         <div className="space-y-1 relative">
           <label className="filter-label">
             <Phone
@@ -351,7 +358,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           />
         </div>
 
-        {/* Search Button in the same row */}
+        {/* SEARCH BUTTON */}
         <div className="flex flex-col justify-end">
           <label className="filter-label opacity-0">
             <Search className="filter-icon" />
@@ -377,7 +384,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         </div>
       </div>
 
-      {/* Active Filters Display */}
+      {/* ACTIVE FILTERS DISPLAY */}
       {hasActiveFilters() && (
         <div className="mt-6 pt-6 border-t border-gray-200">
           <div className="flex items-center justify-between mb-3">
