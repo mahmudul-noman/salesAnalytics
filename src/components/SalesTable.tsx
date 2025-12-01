@@ -15,6 +15,8 @@ interface SalesTableProps {
   isLoading: boolean;
 }
 
+// DATA TABLE COMPONENT WITH SORTING AND PAGINATION
+// Displays sales records with interactive controls and visual styling
 const SalesTable: React.FC<SalesTableProps> = ({
   data,
   filters,
@@ -22,6 +24,8 @@ const SalesTable: React.FC<SalesTableProps> = ({
   pagination,
   isLoading,
 }) => {
+  // SORTING HANDLERS
+  // Toggle sort direction or switch column, reset pagination on sort change
   const handleSort = (column: 'date' | 'price') => {
     const newOrder = filters.sortBy === column && filters.sortOrder === 'asc' ? 'desc' : 'asc';
     onFiltersChange({
@@ -32,6 +36,8 @@ const SalesTable: React.FC<SalesTableProps> = ({
     });
   };
 
+  // PAGINATION HANDLERS
+  // Navigate using cursor-based pagination tokens from API
   const handlePrevious = () => {
     onFiltersChange({
       before: pagination.before,
@@ -46,7 +52,7 @@ const SalesTable: React.FC<SalesTableProps> = ({
     });
   };
 
-  // Get current sort icon
+  // VISUAL INDICATORS FOR SORTING
   const getSortIcon = () => {
     if (!filters.sortBy) return null;
     return filters.sortOrder === 'asc' ?
@@ -60,10 +66,11 @@ const SalesTable: React.FC<SalesTableProps> = ({
     return `Sorted by ${filters.sortBy} (${filters.sortOrder})`;
   };
 
+  // LOADING STATE UI
   if (isLoading) {
     return (
       <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-[rgba(0,178,174,0.3)]">
-        {/* Header with integrated sorting - Always visible */}
+        {/* HEADER WITH DISABLED CONTROLS */}
         <div className="p-6 border-b border-[rgba(0,178,174,0.2)] bg-gradient-to-r from-[rgba(0,178,174,0.05)] to-[rgba(0,116,186,0.05)]">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -169,12 +176,13 @@ const SalesTable: React.FC<SalesTableProps> = ({
     );
   }
 
+  // MAIN TABLE UI
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-[rgba(0,178,174,0.3)] hover:border-[rgba(0,178,174,0.5)] transition-all duration-300">
-      {/* Header with integrated sorting controls */}
+      {/* ENHANCED TABLE HEADER WITH INTEGRATED CONTROLS */}
       <div className="p-6 border-b border-[rgba(0,178,174,0.2)] bg-gradient-to-r from-[rgba(0,178,174,0.05)] to-[rgba(0,116,186,0.05)]">
         <div className="flex items-center justify-between">
-          {/* Left side: Title and info */}
+          {/* LEFT SIDE: TITLE AND INFO */}
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-gradient-to-r from-[#00b2ae] to-[#0074ba] shadow-md">
               <Table className="w-5 h-5 text-white" />
@@ -200,7 +208,7 @@ const SalesTable: React.FC<SalesTableProps> = ({
             </div>
           </div>
 
-          {/* Right side: Sorting controls and status */}
+          {/* RIGHT SIDE: SORTING CONTROLS AND STATUS */}
           <div className="flex items-center gap-3">
             {/* Sorting Controls */}
             <div className="flex flex-col items-end gap-2">
@@ -265,7 +273,7 @@ const SalesTable: React.FC<SalesTableProps> = ({
         </div>
       </div>
 
-      {/* Table Container */}
+      {/* TABLE CONTAINER */}
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
@@ -377,7 +385,7 @@ const SalesTable: React.FC<SalesTableProps> = ({
         </table>
       </div>
 
-      {/* Enhanced Pagination */}
+      {/* ENHANCED PAGINATION */}
       <div className="px-6 py-4 bg-gradient-to-r from-[rgba(0,178,174,0.05)] to-[rgba(0,116,186,0.05)] border-t border-[rgba(0,178,174,0.2)]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -425,7 +433,7 @@ const SalesTable: React.FC<SalesTableProps> = ({
         </div>
       </div>
 
-      {/* Footer with subtle gradient */}
+      {/* FOOTER WITH SUBTLE GRADIENT */}
       <div className="h-1 bg-gradient-to-r from-[#00b2ae] via-[#0074ba] to-[#00b2ae] animate-gradient-x"></div>
       <style>{`
         @keyframes gradient-x {
