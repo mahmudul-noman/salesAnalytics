@@ -7,6 +7,8 @@ import { useSalesData } from './hooks/useSalesData';
 import { FilterParams } from './types';
 
 function App() {
+  // STATE MANAGEMENT
+  // Manages the current filter parameters and their state
   const [filters, setFilters] = useState<FilterParams>({
     startDate: '',
     endDate: '',
@@ -19,8 +21,12 @@ function App() {
     before: '',
   });
 
+  // DATA FETCHING HOOK
+  // Retrieves sales data from the API with filtering and sorting
   const { data, error, isLoading, refetch } = useSalesData(filters);
 
+  // HANDLERS
+  // Event handlers for filter changes and search
   const handleFiltersChange = useCallback((newFilters: Partial<FilterParams>) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
   }, []);
@@ -29,7 +35,7 @@ function App() {
     refetch();
   }, [refetch]);
 
-  // Auto-fetch when filters change (except for manual pagination)
+  // AUTO-FETCH WHEN FILTERS CHANGE (EXCEPT FOR MANUAL PAGINATION)
   useEffect(() => {
     const timer = setTimeout(() => {
       refetch();
@@ -38,6 +44,8 @@ function App() {
     return () => clearTimeout(timer);
   }, [filters, refetch]);
 
+  // ERROR HANDLING
+  // Displays error message and retry button when data fails to load
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -58,16 +66,18 @@ function App() {
     );
   }
 
+  // MAIN APP COMPONENT
+  // Renders the main application layout and components
   return (
     <div className="min-h-screen bg-[#f3f4f6]">
-      {/* Enhanced Header */}
+      {/* ENHANCED HEADER */}
       <header className="sticky top-0 z-50 shadow-lg" style={{ 
         background: 'linear-gradient(135deg, #00b2ae 0%, #0074ba 100%)',
         borderBottomColor: 'rgba(255, 255, 255, 0.2)'
       }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            {/* Logo and Title */}
+            {/* LOGO AND TITLE */}
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
                 <BarChart3 className="w-6 h-6 text-white" />
@@ -78,7 +88,7 @@ function App() {
               </div>
             </div>
 
-            {/* Quick Stats */}
+            {/* QUICK STATS */}
             <div className="flex flex-wrap gap-4">
               <div className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/30">
                 <div className="flex items-center gap-2">
@@ -94,7 +104,7 @@ function App() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        {/* Filters */}
+        {/* FILTERS */}
         <div className="mb-8">
           <FilterPanel
             filters={filters}
@@ -104,7 +114,7 @@ function App() {
           />
         </div>
 
-        {/* Chart */}
+        {/* CHART */}
         <div className="mb-8">
           <SalesChart
             data={data?.results.TotalSales || []}
@@ -112,7 +122,7 @@ function App() {
           />
         </div>
 
-        {/* Table */}
+        {/* TABLE */}
         <div>
           <SalesTable
             data={data?.results.Sales || []}
@@ -124,6 +134,7 @@ function App() {
         </div>
       </main>
 
+      {/* FOOTER */}
       <footer className="mt-16 bg-gradient-to-r from-[#00b2ae] to-[#0074ba]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center text-white">
