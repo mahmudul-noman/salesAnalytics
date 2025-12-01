@@ -135,7 +135,7 @@ The application will run at **[http://localhost:5173](http://localhost:5173)**
 
 ## 📞 Contact
 
-**Developer:** Mahmudul Hasan Noman
+**Developer:** Mahmudul Hasan Noman <br />
 **LinkedIn:** [linkedin.com/in/mahmudul-noman](https://www.linkedin.com/in/mahmudul-noman/)  
 **GitHub:** [github.com/mahmudul-noman](https://github.com/mahmudul-noman)
 
