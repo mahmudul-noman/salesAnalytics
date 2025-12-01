@@ -5,17 +5,18 @@ import SalesChart from './components/SalesChart';
 import SalesTable from './components/SalesTable';
 import { useSalesData } from './hooks/useSalesData';
 import { FilterParams } from './types';
-import { format } from 'date-fns';
 
 function App() {
   const [filters, setFilters] = useState<FilterParams>({
-    startDate: '2025-01-01',
-    endDate: format(new Date(), 'yyyy-MM-dd'),
+    startDate: '',
+    endDate: '',
     priceMin: '',
     email: '',
     phone: '',
     sortBy: 'date',
     sortOrder: 'asc',
+    after: '',
+    before: '',
   });
 
   const { data, error, isLoading, refetch } = useSalesData(filters);
@@ -35,7 +36,7 @@ function App() {
     }, 500); // Debounce API calls
 
     return () => clearTimeout(timer);
-  }, [filters.startDate, filters.endDate, filters.priceMin, filters.email, filters.phone, filters.sortBy, filters.sortOrder]);
+  }, [filters, refetch]);
 
   if (error) {
     return (

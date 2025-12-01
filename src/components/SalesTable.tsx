@@ -368,7 +368,6 @@ const SalesTable: React.FC<SalesTableProps> = ({
                       <span className="text-sm font-medium text-[#333]">
                         {sale.customerPhone}
                       </span>
-                      <span className="text-xs text-gray-500">Primary</span>
                     </div>
                   </div>
                 </td>
