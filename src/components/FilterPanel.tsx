@@ -200,10 +200,10 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   // Format date for display
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
     });
   };
 
@@ -255,7 +255,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
               dateFormat="yyyy-MM-dd"
               placeholderText="Select start date"
               className="filter-input"
-              maxDate={localFilters.endDate ? new Date(localFilters.endDate) : undefined}
+              maxDate={localFilters.endDate ? new Date(localFilters.endDate) : new Date()}
               renderCustomHeader={CustomHeader}
               showPopperArrow={false}
             />
@@ -285,6 +285,11 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
               minDate={
                 localFilters.startDate ? new Date(localFilters.startDate) : undefined
               }
+              maxDate={new Date()}
+              startDate={localFilters.startDate ? new Date(localFilters.startDate) : undefined}
+              endDate={localFilters.endDate ? new Date(localFilters.endDate) : undefined}
+              selectsEnd={!!localFilters.startDate}
+              highlightDates={localFilters.startDate ? [new Date(localFilters.startDate)] : []}
               renderCustomHeader={CustomHeader}
               showPopperArrow={false}
             />
@@ -388,7 +393,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
               Clear All
             </button>
           </div>
-          
+
           <div className="flex flex-wrap items-center gap-2">
             {localFilters.startDate && (
               <div className="filter-tag">
@@ -402,7 +407,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                 </button>
               </div>
             )}
-            
+
             {localFilters.endDate && (
               <div className="filter-tag">
                 <span>End: {formatDate(localFilters.endDate)}</span>
@@ -415,7 +420,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                 </button>
               </div>
             )}
-            
+
             {localFilters.priceMin && (
               <div className="filter-tag">
                 <span>Min Price: ${localFilters.priceMin}</span>
@@ -428,7 +433,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                 </button>
               </div>
             )}
-            
+
             {localFilters.email && (
               <div className="filter-tag">
                 <span>Email: {localFilters.email}</span>
@@ -441,7 +446,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                 </button>
               </div>
             )}
-            
+
             {localFilters.phone && (
               <div className="filter-tag">
                 <span>Phone: {localFilters.phone}</span>
