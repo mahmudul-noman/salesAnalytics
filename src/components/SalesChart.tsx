@@ -1,3 +1,4 @@
+// src\components\SalesChart.tsx
 import React, { useState, useMemo } from 'react';
 import { AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { TrendingUp } from 'lucide-react';
@@ -8,14 +9,19 @@ interface SalesChartProps {
   isLoading: boolean;
 }
 
+// SALES VISUALIZATION CHART COMPONENT
+// Displays sales data in area or line chart format with time aggregation
 const SalesChart: React.FC<SalesChartProps> = ({ data, isLoading }) => {
+  // CHART VIEW CONFIGURATION STATE
+  // Controls time aggregation level (daily/weekly/monthly) and chart type
   const [viewMode, setViewMode] = useState<'daily' | 'weekly' | 'monthly'>('daily');
   const [chartType, setChartType] = useState<'area' | 'line'>('area');
 
-  // Aggregate data based on view mode
+  // DATA AGGREGATION LOGIC
+  // Transforms raw daily data into aggregated views based on selected time period
   const aggregatedData = useMemo(() => {
     if (!data || data.length === 0) return [];
-
+    // DAILY VIEW: Format dates for display, keep all data points
     if (viewMode === 'daily') {
       return data.map(item => ({
         ...item,
@@ -24,7 +30,8 @@ const SalesChart: React.FC<SalesChartProps> = ({ data, isLoading }) => {
     }
 
     const aggregated: Array<{ day: string; totalSale: number; formattedDate: string }> = [];
-    
+
+    // WEEKLY AGGREGATION
     if (viewMode === 'weekly') {
       for (let i = 0; i < data.length; i += 7) {
         const week = data.slice(i, i + 7);
@@ -35,7 +42,10 @@ const SalesChart: React.FC<SalesChartProps> = ({ data, isLoading }) => {
           formattedDate: new Date(week[0].day).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
         });
       }
-    } else if (viewMode === 'monthly') {
+    }
+
+    // MONTHLY AGGREGATION
+    else if (viewMode === 'monthly') {
       const monthlyData: Record<string, { sum: number; count: number }> = {};
       data.forEach(item => {
         const month = item.day.substring(0, 7);
@@ -45,7 +55,7 @@ const SalesChart: React.FC<SalesChartProps> = ({ data, isLoading }) => {
         monthlyData[month].sum += item.totalSale;
         monthlyData[month].count += 1;
       });
-      
+
       Object.entries(monthlyData).forEach(([month, values]) => {
         aggregated.push({
           day: month + '-01',
@@ -57,7 +67,8 @@ const SalesChart: React.FC<SalesChartProps> = ({ data, isLoading }) => {
     return aggregated;
   }, [data, viewMode]);
 
-  // Reduce number of x-axis labels based on data length
+  // TICK INTERVAL CALCULATION
+  // Reduces number of x-axis labels for better readability based on data length
   const tickInterval = useMemo(() => {
     const length = aggregatedData.length;
     if (length > 200) return Math.floor(length / 10);
@@ -66,6 +77,8 @@ const SalesChart: React.FC<SalesChartProps> = ({ data, isLoading }) => {
     return 0;
   }, [aggregatedData]);
 
+  // CUSTOM TOOLTIP COMPONENT
+  // Displays formatted date and total sales value in a tooltip
   const CustomTooltip = ({ active, payload }: { active: boolean, payload: Array<{ value: number, payload: { formattedDate: string } }> }) => {
     if (active && payload && payload.length) {
       return (
@@ -80,6 +93,8 @@ const SalesChart: React.FC<SalesChartProps> = ({ data, isLoading }) => {
     return null;
   };
 
+  // LOADING STATE
+  // Displays loading spinner and message while data is being fetched
   if (isLoading) {
     return (
       <div className="bg-white rounded-xl shadow-lg p-6 h-96 flex items-center justify-center">
@@ -91,6 +106,8 @@ const SalesChart: React.FC<SalesChartProps> = ({ data, isLoading }) => {
     );
   }
 
+  // NO DATA STATE
+  // Displays message when no sales data is available
   if (!data || data.length === 0) {
     return (
       <div className="bg-white rounded-xl shadow-lg p-6 h-96 flex items-center justify-center">
@@ -101,6 +118,8 @@ const SalesChart: React.FC<SalesChartProps> = ({ data, isLoading }) => {
     );
   }
 
+  // MAIN CHART COMPONENT
+  // Renders the chart based on selected view mode and chart type
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
@@ -108,30 +127,27 @@ const SalesChart: React.FC<SalesChartProps> = ({ data, isLoading }) => {
           <TrendingUp className="w-5 h-5 bg-gradient-to-r from-[#00b2ae] to-[#0074ba] text-transparent bg-clip-text" />
           Total Sales Over Time
         </h2>
-        
+
         <div className="flex gap-2 flex-wrap">
           <div className="flex bg-[#f3f4f6] rounded-lg p-1">
             <button
               onClick={() => setViewMode('daily')}
-              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                viewMode === 'daily' ? 'bg-white text-[#0074ba] shadow-sm' : 'text-[#374151] hover:text-[#333]'
-              }`}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${viewMode === 'daily' ? 'bg-white text-[#0074ba] shadow-sm' : 'text-[#374151] hover:text-[#333]'
+                }`}
             >
               Daily
             </button>
             <button
               onClick={() => setViewMode('weekly')}
-              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                viewMode === 'weekly' ? 'bg-white text-[#0074ba] shadow-sm' : 'text-[#374151] hover:text-[#333]'
-              }`}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${viewMode === 'weekly' ? 'bg-white text-[#0074ba] shadow-sm' : 'text-[#374151] hover:text-[#333]'
+                }`}
             >
               Weekly
             </button>
             <button
               onClick={() => setViewMode('monthly')}
-              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                viewMode === 'monthly' ? 'bg-white text-[#0074ba] shadow-sm' : 'text-[#374151] hover:text-[#333]'
-              }`}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${viewMode === 'monthly' ? 'bg-white text-[#0074ba] shadow-sm' : 'text-[#374151] hover:text-[#333]'
+                }`}
             >
               Monthly
             </button>
@@ -140,17 +156,15 @@ const SalesChart: React.FC<SalesChartProps> = ({ data, isLoading }) => {
           <div className="flex bg-[#f3f4f6] rounded-lg p-1">
             <button
               onClick={() => setChartType('area')}
-              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                chartType === 'area' ? 'bg-white text-[#0074ba] shadow-sm' : 'text-[#374151] hover:text-[#333]'
-              }`}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${chartType === 'area' ? 'bg-white text-[#0074ba] shadow-sm' : 'text-[#374151] hover:text-[#333]'
+                }`}
             >
               Area
             </button>
             <button
               onClick={() => setChartType('line')}
-              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                chartType === 'line' ? 'bg-white text-[#0074ba] shadow-sm' : 'text-[#374151] hover:text-[#333]'
-              }`}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${chartType === 'line' ? 'bg-white text-[#0074ba] shadow-sm' : 'text-[#374151] hover:text-[#333]'
+                }`}
             >
               Line
             </button>
@@ -164,13 +178,13 @@ const SalesChart: React.FC<SalesChartProps> = ({ data, isLoading }) => {
             <AreaChart data={aggregatedData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#0074ba" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#0074ba" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="#0074ba" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#0074ba" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis 
-                dataKey="formattedDate" 
+              <XAxis
+                dataKey="formattedDate"
                 stroke="#6b7280"
                 fontSize={12}
                 interval={tickInterval}
@@ -178,7 +192,7 @@ const SalesChart: React.FC<SalesChartProps> = ({ data, isLoading }) => {
                 textAnchor="end"
                 height={80}
               />
-              <YAxis 
+              <YAxis
                 stroke="#6b7280"
                 fontSize={12}
                 tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
@@ -196,8 +210,8 @@ const SalesChart: React.FC<SalesChartProps> = ({ data, isLoading }) => {
           ) : (
             <LineChart data={aggregatedData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis 
-                dataKey="formattedDate" 
+              <XAxis
+                dataKey="formattedDate"
                 stroke="#6b7280"
                 fontSize={12}
                 interval={tickInterval}
@@ -205,7 +219,7 @@ const SalesChart: React.FC<SalesChartProps> = ({ data, isLoading }) => {
                 textAnchor="end"
                 height={80}
               />
-              <YAxis 
+              <YAxis
                 stroke="#6b7280"
                 fontSize={12}
                 tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
