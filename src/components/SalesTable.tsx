@@ -179,28 +179,29 @@ const SalesTable: React.FC<SalesTableProps> = ({
   // MAIN TABLE UI
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-[rgba(0,178,174,0.3)] hover:border-[rgba(0,178,174,0.5)] transition-all duration-300">
-      {/* ENHANCED TABLE HEADER WITH INTEGRATED CONTROLS */}
-      <div className="p-6 border-b border-[rgba(0,178,174,0.2)] bg-gradient-to-r from-[rgba(0,178,174,0.05)] to-[rgba(0,116,186,0.05)]">
-        <div className="flex items-center justify-between">
+      {/* ENHANCED TABLE HEADER WITH INTEGRATED CONTROLS - RESPONSIVE */}
+      <div className="p-4 md:p-6 border-b border-[rgba(0,178,174,0.2)] bg-gradient-to-r from-[rgba(0,178,174,0.05)] to-[rgba(0,116,186,0.05)]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+
           {/* LEFT SIDE: TITLE AND INFO */}
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-gradient-to-r from-[#00b2ae] to-[#0074ba] shadow-md">
-              <Table className="w-5 h-5 text-white" />
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="p-2 rounded-lg bg-gradient-to-r from-[#00b2ae] to-[#0074ba] shadow-md flex-shrink-0">
+              <Table className="w-4 h-4 md:w-5 md:h-5 text-white" />
             </div>
-            <div>
-              <h2 className="text-xl font-semibold bg-gradient-to-r from-[#00b2ae] to-[#0074ba] text-transparent bg-clip-text">
+            <div className="flex-1 min-w-0">
+              <h2 className="text-lg md:text-xl font-semibold bg-gradient-to-r from-[#00b2ae] to-[#0074ba] text-transparent bg-clip-text truncate">
                 Sales Data
               </h2>
-              <div className="flex items-center gap-3 mt-1">
-                <p className="text-sm text-[#6b7280]">
+              <div className="flex flex-wrap items-center gap-2 md:gap-3 mt-1">
+                <p className="text-xs md:text-sm text-[#6b7280] whitespace-nowrap">
                   Showing <span className="font-medium text-[#0074ba]">{data.length} items</span>
                 </p>
                 {filters.sortBy && (
                   <>
-                    <div className="w-px h-3 bg-gray-300"></div>
-                    <div className="flex items-center gap-1 text-sm text-gray-600">
+                    <div className="hidden md:block w-px h-3 bg-gray-300"></div>
+                    <div className="flex items-center gap-1 text-xs md:text-sm text-gray-600">
                       {getSortIcon()}
-                      <span>{getSortLabel()}</span>
+                      <span className="truncate">{getSortLabel()}</span>
                     </div>
                   </>
                 )}
@@ -209,65 +210,85 @@ const SalesTable: React.FC<SalesTableProps> = ({
           </div>
 
           {/* RIGHT SIDE: SORTING CONTROLS AND STATUS */}
-          <div className="flex items-center gap-3">
-            {/* Sorting Controls */}
-            <div className="flex flex-col items-end gap-2">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-gray-700">Sort by:</span>
-                <div className="flex items-center gap-1 bg-white rounded-lg border border-gray-200 p-1">
-                  <button
-                    onClick={() => handleSort('date')}
-                    className={`
-                      px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-1.5
-                      ${filters.sortBy === 'date'
-                        ? 'bg-gradient-to-r from-[rgba(0,178,174,0.1)] to-[rgba(0,116,186,0.1)] text-[#0074ba] border border-[rgba(0,178,174,0.3)]'
-                        : 'text-gray-700 hover:bg-gray-50 hover:text-[#0074ba]'
-                      }
-                      hover:shadow-sm active:scale-[0.98]
-                    `}
-                  >
-                    <span>Date</span>
-                    {filters.sortBy === 'date' && (
-                      <div className="flex flex-col -space-y-1">
-                        <ChevronUp className={`w-3 h-3 ${filters.sortOrder === 'asc' ? 'text-[#0074ba]' : 'text-gray-400'}`} />
-                        <ChevronDown className={`w-3 h-3 ${filters.sortOrder === 'desc' ? 'text-[#0074ba]' : 'text-gray-400'}`} />
-                      </div>
-                    )}
-                  </button>
-                  <div className="w-px h-4 bg-gray-300"></div>
-                  <button
-                    onClick={() => handleSort('price')}
-                    className={`
-                      px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-1.5
-                      ${filters.sortBy === 'price'
-                        ? 'bg-gradient-to-r from-[rgba(0,178,174,0.1)] to-[rgba(0,116,186,0.1)] text-[#0074ba] border border-[rgba(0,178,174,0.3)]'
-                        : 'text-gray-700 hover:bg-gray-50 hover:text-[#0074ba]'
-                      }
-                      hover:shadow-sm active:scale-[0.98]
-                    `}
-                  >
-                    <span>Price</span>
-                    {filters.sortBy === 'price' && (
-                      <div className="flex flex-col -space-y-1">
-                        <ChevronUp className={`w-3 h-3 ${filters.sortOrder === 'asc' ? 'text-[#0074ba]' : 'text-gray-400'}`} />
-                        <ChevronDown className={`w-3 h-3 ${filters.sortOrder === 'desc' ? 'text-[#0074ba]' : 'text-gray-400'}`} />
-                      </div>
-                    )}
-                  </button>
-                </div>
+          <div className="flex items-center justify-between sm:justify-end gap-2">
+            {/* Sorting Controls - Responsive Layout */}
+            <div className="flex flex-col w-full sm:w-auto">
+              <div className="flex items-center justify-between sm:justify-end gap-2">
+                {/* Sort Label - Hidden on mobile, shown on sm+ */}
+                <span className="hidden sm:block text-sm font-medium text-gray-700 whitespace-nowrap">Sort by:</span>
 
-                {filters.sortBy && (
-                  <button
-                    onClick={() => handleSort('date')}
-                    className="ml-1 px-2 py-1 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors flex items-center gap-1"
-                    title="Reset to default sort"
-                  >
-                    <span className="text-xs">↺</span>
-                    Reset
-                  </button>
-                )}
+                {/* Sort Buttons Container */}
+                <div className="flex items-center flex-1 sm:flex-none">
+                  <div className="flex items-center bg-white rounded-lg border border-gray-200 p-1 w-full sm:w-auto">
+                    {/* Date Sort Button */}
+                    <button
+                      onClick={() => handleSort('date')}
+                      className={`
+                  px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all duration-200 
+                  flex items-center justify-center gap-1.5 flex-1 sm:flex-none min-w-[60px] sm:min-w-0
+                  ${filters.sortBy === 'date'
+                          ? 'bg-gradient-to-r from-[rgba(0,178,174,0.1)] to-[rgba(0,116,186,0.1)] text-[#0074ba] border border-[rgba(0,178,174,0.3)]'
+                          : 'text-gray-700 hover:bg-gray-50 hover:text-[#0074ba]'
+                        }
+                  hover:shadow-sm active:scale-[0.98]
+                `}
+                    >
+                      <span className="truncate">Date</span>
+                      {filters.sortBy === 'date' && (
+                        <div className="hidden sm:flex flex-col -space-y-1 flex-shrink-0">
+                          <ChevronUp className={`w-3 h-3 ${filters.sortOrder === 'asc' ? 'text-[#0074ba]' : 'text-gray-400'}`} />
+                          <ChevronDown className={`w-3 h-3 ${filters.sortOrder === 'desc' ? 'text-[#0074ba]' : 'text-gray-400'}`} />
+                        </div>
+                      )}
+                    </button>
+
+                    {/* Divider - Hide on very small screens */}
+                    <div className="w-px h-4 bg-gray-300 mx-1 sm:mx-2"></div>
+
+                    {/* Price Sort Button */}
+                    <button
+                      onClick={() => handleSort('price')}
+                      className={`
+                  px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all duration-200 
+                  flex items-center justify-center gap-1.5 flex-1 sm:flex-none min-w-[60px] sm:min-w-0
+                  ${filters.sortBy === 'price'
+                          ? 'bg-gradient-to-r from-[rgba(0,178,174,0.1)] to-[rgba(0,116,186,0.1)] text-[#0074ba] border border-[rgba(0,178,174,0.3)]'
+                          : 'text-gray-700 hover:bg-gray-50 hover:text-[#0074ba]'
+                        }
+                  hover:shadow-sm active:scale-[0.98]
+                `}
+                    >
+                      <span className="truncate">Price</span>
+                      {filters.sortBy === 'price' && (
+                        <div className="hidden sm:flex flex-col -space-y-1 flex-shrink-0">
+                          <ChevronUp className={`w-3 h-3 ${filters.sortOrder === 'asc' ? 'text-[#0074ba]' : 'text-gray-400'}`} />
+                          <ChevronDown className={`w-3 h-3 ${filters.sortOrder === 'desc' ? 'text-[#0074ba]' : 'text-gray-400'}`} />
+                        </div>
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Reset Button - Smaller on mobile */}
+                  {filters.sortBy && (
+                    <button
+                      onClick={() => handleSort('date')}
+                      className="ml-1 sm:ml-2 px-1.5 sm:px-2 py-1 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors flex items-center gap-1 flex-shrink-0"
+                      title="Reset to default sort"
+                    >
+                      <span className="text-xs">↺</span>
+                      <span className="hidden xs:inline">Reset</span>
+                    </button>
+                  )}
+                </div>
               </div>
 
+              {/* Sort Status - Mobile Only (shown below sort controls) */}
+              {filters.sortBy && (
+                <div className="sm:hidden flex items-center gap-1 text-xs text-gray-600 mt-2 pl-1">
+                  {getSortIcon()}
+                  <span className="truncate">Sorted by {getSortLabel()}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -386,48 +407,70 @@ const SalesTable: React.FC<SalesTableProps> = ({
       </div>
 
       {/* ENHANCED PAGINATION */}
-      <div className="px-6 py-4 bg-gradient-to-r from-[rgba(0,178,174,0.05)] to-[rgba(0,116,186,0.05)] border-t border-[rgba(0,178,174,0.2)]">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="text-sm text-[#6b7280]">
-              <span className="font-medium text-[#0074ba]">{data.length}</span> of up to 50 items per page
+      <div className="px-4 sm:px-6 py-3 sm:py-4 bg-gradient-to-r from-[rgba(0,178,174,0.05)] to-[rgba(0,116,186,0.05)] border-t border-[rgba(0,178,174,0.2)]">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
+          {/* Left Section - Item Count & Status */}
+          <div className="flex items-center justify-between w-full sm:w-auto">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="text-xs sm:text-sm text-[#6b7280]">
+                <span className="font-medium text-[#0074ba]">{data.length}</span>
+                <span className="hidden xs:inline"> of up to 50 items per page</span>
+                <span className="xs:hidden">/50</span>
+              </div>
+              <div className="hidden sm:flex items-center gap-1">
+                <div className="w-2 h-2 rounded-full bg-[#00b2ae] animate-pulse"></div>
+                <span className="text-xs text-[#9ca3af]">Live Updates</span>
+              </div>
             </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-[#00b2ae] animate-pulse"></div>
-              <span className="text-xs text-[#9ca3af]">Live Updates</span>
+
+            {/* Mobile-only Live Indicator */}
+            <div className="sm:hidden flex items-center gap-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-[#00b2ae] animate-pulse"></div>
+              <span className="text-[10px] text-[#9ca3af]">Live</span>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+
+          {/* Right Section - Pagination Controls */}
+          <div className="flex items-center justify-between w-full sm:w-auto gap-2">
+            {/* Previous Button */}
             <button
               onClick={handlePrevious}
               disabled={!pagination.before}
               className={`
-                px-4 py-2.5 text-sm font-medium rounded-lg flex items-center gap-2
-                transition-all duration-300 transform hover:-translate-x-1 disabled:transform-none
-                ${!pagination.before
+          flex-1 sm:flex-none px-3 py-2 sm:px-4 sm:py-2.5 text-sm font-medium rounded-lg 
+          flex items-center justify-center gap-1 sm:gap-2 transition-all duration-300 
+          ${!pagination.before
                   ? 'opacity-50 cursor-not-allowed bg-white border border-[#d1d5db] text-[#9ca3af]'
-                  : 'bg-white border border-[#00b2ae] text-[#0074ba] hover:bg-gradient-to-r hover:from-[rgba(0,178,174,0.05)] hover:to-[rgba(0,116,186,0.05)] hover:shadow-md hover:border-[#0074ba] active:scale-[0.98]'
+                  : 'bg-white border border-[#00b2ae] text-[#0074ba] hover:bg-gradient-to-r hover:from-[rgba(0,178,174,0.05)] hover:to-[rgba(0,116,186,0.05)] active:scale-[0.98] sm:hover:shadow-md sm:hover:border-[#0074ba] sm:transform sm:hover:-translate-x-1'
                 }
-              `}
+        `}
             >
-              <ChevronLeft className="w-4 h-4" />
-              <span className="font-semibold">Previous</span>
+              <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="text-xs sm:text-sm font-semibold hidden xs:inline">Previous</span>
+              <span className="text-xs sm:text-sm font-semibold xs:hidden">Prev</span>
             </button>
-            <div className="w-px h-6 bg-gradient-to-b from-[#00b2ae] to-[#0074ba]"></div>
+
+            {/* Vertical Divider - Hidden on mobile */}
+            <div className="hidden sm:block w-px h-6 bg-gradient-to-b from-[#00b2ae] to-[#0074ba]"></div>
+
+            {/* Mobile Divider */}
+            <div className="sm:hidden w-2"></div>
+
+            {/* Next Button */}
             <button
               onClick={handleNext}
               disabled={!pagination.after}
               className={`
-                px-4 py-2.5 text-sm font-medium rounded-lg flex items-center gap-2
-                transition-all duration-300 transform hover:translate-x-1 disabled:transform-none
-                ${!pagination.after
+          flex-1 sm:flex-none px-3 py-2 sm:px-4 sm:py-2.5 text-sm font-medium rounded-lg 
+          flex items-center justify-center gap-1 sm:gap-2 transition-all duration-300 
+          ${!pagination.after
                   ? 'opacity-50 cursor-not-allowed bg-white border border-[#d1d5db] text-[#9ca3af]'
-                  : 'bg-white border border-[#00b2ae] text-[#0074ba] hover:bg-gradient-to-r hover:from-[rgba(0,178,174,0.05)] hover:to-[rgba(0,116,186,0.05)] hover:shadow-md hover:border-[#0074ba] active:scale-[0.98]'
+                  : 'bg-white border border-[#00b2ae] text-[#0074ba] hover:bg-gradient-to-r hover:from-[rgba(0,178,174,0.05)] hover:to-[rgba(0,116,186,0.05)] active:scale-[0.98] sm:hover:shadow-md sm:hover:border-[#0074ba] sm:transform sm:hover:translate-x-1'
                 }
-              `}
+        `}
             >
-              <span className="font-semibold">Next</span>
-              <ChevronRight className="w-4 h-4" />
+              <span className="text-xs sm:text-sm font-semibold">Next</span>
+              <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </button>
           </div>
         </div>
