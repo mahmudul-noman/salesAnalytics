@@ -101,18 +101,12 @@ cd salesAnalytics
 npm install
 ```
 
-### 3️⃣ Configure Environment Variables
-Create a `.env` file in the root directory:
-```env
-REACT_APP_API_BASE_URL=your_api_url_here
-```
-
-### 4️⃣ Start the Development Server
+### 3️⃣ Start the Development Server
 ```bash
-npm start
+npm run dev
 ```
 
-The application will run at **[http://localhost:3000](http://localhost:3000)**
+The application will run at **[http://localhost:5173](http://localhost:5173)**
 
 ---
 
