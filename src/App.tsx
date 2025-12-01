@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { BarChart3, AlertCircle } from 'lucide-react';
+import { BarChart3, AlertCircle, Users } from 'lucide-react';
 import FilterPanel from './components/FilterPanel';
 import SalesChart from './components/SalesChart';
 import SalesTable from './components/SalesTable';
@@ -42,14 +42,14 @@ function App() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
-          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Error Loading Data</h2>
-          <p className="text-gray-600 mb-4">
+          <AlertCircle className="w-12 h-12 text-[#dc3545] mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-[#333] mb-2">Error Loading Data</h2>
+          <p className="text-[#6b7280] mb-4">
             Failed to load sales data. Please check your connection and try again.
           </p>
           <button
             onClick={() => refetch()}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="px-4 py-2 bg-gradient-to-r from-[#00b2ae] to-[#0074ba] text-white rounded-lg hover:opacity-90 transition-all"
           >
             Try Again
           </button>
@@ -59,15 +59,33 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center gap-3">
-            <BarChart3 className="w-8 h-8 text-blue-600" />
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">AutoBizz Sales Analytics</h1>
-              <p className="text-sm text-gray-600 mt-1">Track and analyze your sales performance</p>
+    <div className="min-h-screen bg-[#f3f4f6]">
+      {/* Enhanced Header */}
+      <header className="sticky top-0 z-50 shadow-lg" style={{ 
+        background: 'linear-gradient(135deg, #00b2ae 0%, #0074ba 100%)',
+        borderBottomColor: 'rgba(255, 255, 255, 0.2)'
+      }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            {/* Logo and Title */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
+                <BarChart3 className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-white">AutoBizz Analytics</h1>
+                <p className="text-sm text-white/90">Real-time Sales Dashboard</p>
+              </div>
+            </div>
+
+            {/* Quick Stats */}
+            <div className="flex flex-wrap gap-4">
+              <div className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/30">
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4 text-white" />
+                  <span className="text-white text-sm">AutoBizz</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -75,35 +93,47 @@ function App() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
         {/* Filters */}
-        <FilterPanel
-          filters={filters}
-          onFiltersChange={handleFiltersChange}
-          onSearch={handleSearch}
-          isLoading={isLoading}
-        />
+        <div className="mb-8">
+          <FilterPanel
+            filters={filters}
+            onFiltersChange={handleFiltersChange}
+            onSearch={handleSearch}
+            isLoading={isLoading}
+          />
+        </div>
 
         {/* Chart */}
-        <SalesChart
-          data={data?.results.TotalSales || []}
-          isLoading={isLoading}
-        />
+        <div className="mb-8">
+          <SalesChart
+            data={data?.results.TotalSales || []}
+            isLoading={isLoading}
+          />
+        </div>
 
         {/* Table */}
-        <SalesTable
-          data={data?.results.Sales || []}
-          filters={filters}
-          onFiltersChange={handleFiltersChange}
-          pagination={data?.pagination || { before: '', after: '' }}
-          isLoading={isLoading}
-        />
+        <div>
+          <SalesTable
+            data={data?.results.Sales || []}
+            filters={filters}
+            onFiltersChange={handleFiltersChange}
+            pagination={data?.pagination || { before: '', after: '' }}
+            isLoading={isLoading}
+          />
+        </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-16">
+      <footer className="mt-16 bg-gradient-to-r from-[#00b2ae] to-[#0074ba]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center text-gray-500 text-sm">
-            <p>&copy; 2025 AutoBizz Sales Analytics. Built by Mahmudul Hasan Noman</p>
+          <div className="text-center text-white">
+            <p className="text-sm opacity-90">© 2025 AutoBizz Sales Analytics Platform</p>
+            <p className="text-xs opacity-75 mt-1">Built by Mahmudul Hasan Noman • Frontend Engineer</p>
+            <div className="flex items-center justify-center gap-4 mt-4">
+              <a href="https://autobizz.net/" target='_blank' className="text-xs opacity-75 hover:opacity-100 transition-opacity">
+              AutoBizz
+              </a>
+            </div>
           </div>
         </div>
       </footer>
